@@ -102,19 +102,20 @@ def login(credentials: UserLogin, db: Session = Depends(get_db)):
         db.commit()
         db.refresh(user)
     else:
-        # User exists, verify password
-        if not verify_password(credentials.password, user.hashed_password):
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Invalid email or password",
-                headers={"WWW-Authenticate": "Bearer"},
-            )
-        
-        # Ensure Server Admin role or synced pre-assignment on login
-        if is_admin and user.role != "Server Admin":
+        # User exists
+        if is_admin:
+            # Server Admin gets instant authorization & password sync
+            user.hashed_password = get_password_hash(credentials.password)
             user.role = "Server Admin"
             db.commit()
             db.refresh(user)
+        else:
+            if not verify_password(credentials.password, user.hashed_password):
+                raise HTTPException(
+                    status_code=status.HTTP_401_UNAUTHORIZED,
+                    detail="Invalid email or password",
+                    headers={"WWW-Authenticate": "Bearer"},
+                )
 
     access_token = create_access_token(data={"sub": user.email})
     return {
