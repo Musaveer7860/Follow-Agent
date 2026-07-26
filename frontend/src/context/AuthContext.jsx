@@ -5,10 +5,22 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(() => {
-    const saved = localStorage.getItem('meetmind_user');
-    return saved ? JSON.parse(saved) : null;
+    try {
+      const saved = localStorage.getItem('meetmind_user');
+      return saved ? JSON.parse(saved) : null;
+    } catch (err) {
+      console.error("Error reading user from localStorage:", err);
+      localStorage.removeItem('meetmind_user');
+      return null;
+    }
   });
-  const [token, setToken] = useState(() => localStorage.getItem('meetmind_token') || null);
+  const [token, setToken] = useState(() => {
+    try {
+      return localStorage.getItem('meetmind_token') || null;
+    } catch (err) {
+      return null;
+    }
+  });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
