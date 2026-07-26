@@ -5,7 +5,7 @@ const getBaseUrl = () => {
     return import.meta.env.VITE_API_BASE_URL;
   }
   if (typeof window !== 'undefined' && window.location.hostname.includes('render.com')) {
-    return 'https://follow-agent-backend.onrender.com/api';
+    return 'https://follow-agent.onrender.com/api';
   }
   return '/api';
 };
