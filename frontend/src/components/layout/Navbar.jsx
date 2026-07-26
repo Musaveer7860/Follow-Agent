@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { isHigherRole } from '../../utils/authUtils';
-import { Bell, LogOut, User, Settings, Plus, Layers, Send, Crown, Users } from 'lucide-react';
+import { Bell, LogOut, User, Settings, Plus, Layers, Send, Crown, Users, ShieldCheck } from 'lucide-react';
 import { Button } from '../ui/Button';
 
 export const Navbar = ({ notifications = [], onNotificationClick }) => {
